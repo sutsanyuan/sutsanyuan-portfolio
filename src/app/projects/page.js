@@ -7,8 +7,25 @@ const Projects = () => {
             description:
                 "A modern, minimalist personal portfolio website built with Next.js App Router, Tailwind CSS, and deployed on Vercel.",
             tags: ["Next.js", "Tailwind CSS", "React"],
-            github: "https://github.com/",
-            demo: "#",
+            github: "https://github.com/sutsanyuan/sutsanyuan-portfolio",
+            demo: "https://sutsanyuan-portfolio.vercel.app/",
+        },
+        {
+            title: "Little Lemon Restaurant Reservation System",
+            description: `Developed an end-to-end restaurant reservation solution to address the lack of online booking capabilities for Little Lemon Restaurant. This project bridges the gap between user experience research and technical execution, delivering a functional, responsive, and robust application.`,
+            tags: [
+                "React",
+                "create-react-app",
+                "JavaScript",
+                "HTML5",
+                "SCSS",
+                "Jest",
+                "Figma",
+                "Jest",
+                "UX Design",
+            ],
+            github: "https://github.com/sutsanyuan/little-lemon",
+            demo: "https://little-lemon-4k4.pages.dev/",
         },
     ];
     return (
