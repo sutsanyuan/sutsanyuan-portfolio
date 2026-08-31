@@ -18,7 +18,7 @@ export default function Navbar() {
         {/* 桌面版導覽列 */}
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-600 dark:text-gray-300">
           <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Home</Link>
-          <Link href="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition">About</Link>
+          <Link href="/aboutTsan" className="hover:text-blue-600 dark:hover:text-blue-400 transition">About</Link>
           <Link href="/projects" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Projects</Link>
           <Link href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Contact</Link>
         </div>
