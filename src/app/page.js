@@ -7,15 +7,21 @@ export default function Home() {
                 <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-blue-600 uppercase bg-blue-50 rounded-full">
                     Frontend Developer
                 </span>
-                <h1 className="font-sans text-4xl sm:text-6xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
-                    Hi, I&apos;m <br className="block sm:hidden" />
-                    {/* 手機版斷行，讓名字單獨一行 */}
-                    <span className="relative inline-flex items-baseline font-[family-name:var(--font-pixel)] text-3xl sm:text-5xl text-blue-600 dark:text-blue-400 mx-1 sm:mx-2">
-                        {/* 因為像素字體偏小，我們用相對大小調整，這裡 sm:text-5xl 大約等於旁邊的 text-6xl */}
-                        TSAN
-                    </span>{" "}
-                    <br />
-                    <span className="text-gray-400 ">I build clean & modern web experiences.</span>
+                <h1 className="font-sans tracking-tight text-gray-900 dark:text-white">
+                    {/* 手機版直排、桌機版橫排的標題區塊 */}
+                    <span className="block sm:inline-block text-5xl  font-normal text-gray-900 dark:text-white mb-4 sm:mb-2">
+                        <span className=" mb-2 sm:mb-0  text-gray-500 dark:text-gray-400 sm:text-gray-900 sm:dark:text-white">
+                            Hi, I&apos;m
+                        </span>{" "}
+                        <span className="relative inline-flex items-center translate-y-[0.15em] sm:translate-y-[0.2em] font-pixel sm:text-[0.85em] text-4xl text-blue-600 dark:text-blue-400 mx-0">
+                            TSAN
+                        </span>
+                    </span>
+
+                    {/* 第三行：核心定位 */}
+                    <span className="block text-3xl sm:text-5xl font-semibold leading-tight text-gray-400 dark:text-white">
+                        I build clean & modern web experiences.
+                    </span>
                 </h1>
                 <p className="text-lg text-gray-600 max-w-2xl leading-relaxed">
                     Passionate about crafting intuitive, high-performance web applications with
