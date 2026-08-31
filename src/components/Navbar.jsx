@@ -27,7 +27,6 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => {
-            console.log("漢堡被點擊了！目前狀態：", !isOpen); // 測試用：點擊時可以在瀏覽器主控台看見
             setIsOpen(!isOpen);
           }}
           className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center focus:outline-none cursor-pointer"
@@ -55,40 +54,16 @@ export default function Navbar() {
       </nav>
 
       {/* 手機版展開選單 */}
-      {isOpen && (
-        <div className="md:hidden border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 py-4 shadow-md">
-          <div className="flex flex-col space-y-4 px-6 text-base font-medium text-gray-700 dark:text-gray-200">
-            <Link
-              href="/"
-              onClick={() => setIsOpen(false)}
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              onClick={() => setIsOpen(false)}
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
-            >
-              About
-            </Link>
-            <Link
-              href="/projects"
-              onClick={() => setIsOpen(false)}
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
-            >
-              Projects
-            </Link>
-            <Link
-              href="/contact"
-              onClick={() => setIsOpen(false)}
-              className="hover:text-blue-600 dark:hover:text-blue-400 transition"
-            >
-              Contact
-            </Link>
-          </div>
-        </div>
-      )}
+      <div className={`md:hidden grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+  <div className="overflow-hidden border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950">
+    <div className="flex flex-col space-y-4 px-6 py-4 text-base font-medium text-gray-700 dark:text-gray-200">
+      <Link href="/" onClick={() => setIsOpen(false)}>Home</Link>
+      <Link href="/aboutTsan" onClick={() => setIsOpen(false)}>About</Link>
+      <Link href="/projects" onClick={() => setIsOpen(false)}>Projects</Link>
+      <Link href="/contact" onClick={() => setIsOpen(false)}>Contact</Link>
+    </div>
+  </div>
+</div>
     </header>
   );
 }
