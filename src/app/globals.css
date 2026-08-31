@@ -12,9 +12,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  
   /* 新增這一行：定義 font-pixel 這個 utility class */
-  --font-pixel: var(--font-press-start); 
+  --font-pixel: var(--font-press-start);
 }
 
 /* @media (prefers-color-scheme: dark) {

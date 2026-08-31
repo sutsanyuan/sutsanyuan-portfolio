@@ -10,7 +10,7 @@ export default function Home() {
                 <h1 className="font-sans text-4xl sm:text-6xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
                     Hi, I&apos;m <br className="block sm:hidden" />
                     {/* 手機版斷行，讓名字單獨一行 */}
-                    <span className="relative inline-flex items-baseline font-pixel text-3xl sm:text-5xl text-blue-600 dark:text-blue-400 mx-1 sm:mx-2">
+                    <span className="relative inline-flex items-baseline font-[family-name:var(--font-pixel)] text-3xl sm:text-5xl text-blue-600 dark:text-blue-400 mx-1 sm:mx-2">
                         {/* 因為像素字體偏小，我們用相對大小調整，這裡 sm:text-5xl 大約等於旁邊的 text-6xl */}
                         TSAN
                     </span>{" "}
