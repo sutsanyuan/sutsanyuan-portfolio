@@ -27,6 +27,13 @@ const Projects = () => {
             github: "https://github.com/sutsanyuan/little-lemon",
             demo: "https://little-lemon-4k4.pages.dev/",
         },
+        {
+            title: "Pomodoro",
+            description: `Developed an pomodoro tool with Next.js App Router, Tailwind CSS, and deployed on Vercel.`,
+            tags: ["Next.js", "Tailwind CSS", "React"],
+            github: "https://github.com/sutsanyuan/sutsanyuan-portfolio/tree/main/src/app/projects/pomodoro",
+            demo: "https://sutsanyuan-portfolio.vercel.app/projects/pomodoro",
+        },
     ];
     return (
         <div className="max-w-5xl mx-auto px-6 sm:px-12 py-16 space-y-12">
