@@ -20,7 +20,7 @@ const Contact = () => {
                         <a
                             href="mailto:your.email@example.com"
                             className="text-lg font-medium text-blue-600 hover:underline">
-                            your.email@example.com
+                            tsanyuansu@gmail.com
                         </a>
                     </address>
                 </div>
@@ -31,14 +31,14 @@ const Contact = () => {
                     </h2>
                     <nav className="flex gap-6 pt-1">
                         <a
-                            href="https://github.com"
+                            href="https://github.com/sutsanyuan"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-gray-700 hover:text-gray-900 font-medium transition">
                             GitHub
                         </a>
                         <a
-                            href="https://linkedin.com"
+                            href="https://www.linkedin.com/in/tsanyuansu/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-gray-700 hover:text-gray-900 font-medium transition">
