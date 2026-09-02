@@ -10,24 +10,25 @@ export default function PomodoroPage() {
         rest: { name: "Rest", time: 15 * 60 },
     };
 
-    const modeKeys = ["focus", "break", "rest"];
-
     const [mode, setMode] = useState("focus");
     const [timeLeft, setTimeLeft] = useState(MODES.focus.time);
     const [isRunning, setIsRunning] = useState(false);
 
+    // 新增：記錄總共完成了幾個專注循環（用來決定何時進入長休息）
+    const [focusCount, setFocusCount] = useState(0);
+
     // 滑鼠懸停動畫狀態
     const [isHovered, setIsHovered] = useState(false);
     const [hoverFrame, setHoverFrame] = useState(0);
+    const modeKeys = ["focus", "break", "rest"];
 
-    // 番茄圖片對應路徑 (請確認 public/images/ 資料夾內有這三張圖)
     const tomatoImages = {
         focus: "/images/tomato-red.svg",
         break: "/images/tomato-yellow.svg",
         rest: "/images/tomato-green.svg",
     };
 
-    // 倒數計時核心邏輯
+    // 倒數計時與自動切換邏輯
     useEffect(() => {
         let timer;
         if (isRunning && timeLeft > 0) {
@@ -36,18 +37,37 @@ export default function PomodoroPage() {
             }, 1000);
         } else if (timeLeft === 0) {
             setIsRunning(false);
-            alert("時間到！狀態已結束。");
+
+            // 時間到時的自動流轉邏輯
+            if (mode === "focus") {
+                const nextCount = focusCount + 1;
+                setFocusCount(nextCount);
+
+                if (nextCount % 4 === 0) {
+                    // 每滿 4 個專注循環，進入 15 分鐘長休息 (Rest)
+                    alert("太棒了！妳已經完成了 4 個專注循環，享受 15 分鐘的長休息吧！");
+                    changeMode("rest");
+                } else {
+                    // 一般情況進入 5 分鐘短休息 (Break)
+                    alert("專注時間結束！休息 5 分鐘吧。");
+                    changeMode("break");
+                }
+            } else {
+                // 休息結束，自動回到專注 (Focus)
+                alert("休息時間結束，準備好進入下一個專注了嗎？");
+                changeMode("focus");
+            }
         }
         return () => clearInterval(timer);
-    }, [isRunning, timeLeft]);
+    }, [isRunning, timeLeft, mode, focusCount]);
 
-    // 滑鼠游標滑過番茄時的循環動畫
+    // 滑鼠懸停動畫
     useEffect(() => {
         let animTimer;
         if (isHovered) {
             animTimer = setInterval(() => {
                 setHoverFrame((prev) => (prev + 1) % modeKeys.length);
-            }, 100);
+            }, 300);
         } else {
             setHoverFrame(0);
         }
@@ -68,21 +88,27 @@ export default function PomodoroPage() {
         setTimeLeft(MODES[newMode].time);
     };
 
-    // 切換到下一個模式（用於點擊番茄或箭頭）
+    // 手動按 NEXT 時的標準番茄鐘循環順序 (Focus -> Break -> Focus -> Break -> Rest)
     const handleNextMode = () => {
-        const currentIndex = modeKeys.indexOf(mode);
-        const nextIndex = (currentIndex + 1) % modeKeys.length;
-        changeMode(modeKeys[nextIndex]);
+        if (mode === "focus") {
+            // 根據目前的完成次數決定下一個是短休息還是長休息
+            if ((focusCount + 1) % 4 === 0) {
+                changeMode("rest");
+            } else {
+                changeMode("break");
+            }
+        } else {
+            // 從 Break 或 Rest 點 NEXT 則回到 Focus
+            changeMode("focus");
+        }
     };
 
-    // 取得左側/右側按鈕應該顯示的模式名稱（對應設計稿的左右環繞）
     const currentIndex = modeKeys.indexOf(mode);
     const leftModeKey = modeKeys[(currentIndex - 1 + modeKeys.length) % modeKeys.length];
     const rightModeKey = modeKeys[(currentIndex + 1) % modeKeys.length];
 
     return (
         <div className="flex flex-col min-h-[calc(100vh-140px)] justify-center items-center px-6 max-w-xl mx-auto py-12">
-            {/* 返回專案列表 */}
             <div className="w-full text-left mb-6">
                 <Link
                     href="/projects"
@@ -91,16 +117,12 @@ export default function PomodoroPage() {
                 </Link>
             </div>
 
-            {/* 主面板容器 */}
             <div className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 shadow-sm text-center flex flex-col items-center">
-                {/* 標題 */}
-                <h1 className="font-pixel text-3xl text-gray-900 dark:text-white mb-6 tracking-wider">
+                <h1 className="font-pixel text-3xl text-gray-900 dark:text-white mb-2 tracking-wider">
                     POMODORO
                 </h1>
 
-                {/* 核心互動區：左右兩側夾著模式切換與番茄圖 */}
                 <div className="flex items-center justify-center gap-6 mb-4">
-                    {/* 左側模式按鈕 (帶小箭頭) */}
                     <button
                         onClick={() => changeMode(leftModeKey)}
                         className="flex items-center gap-1 font-pixel text-xs text-gray-400 hover:text-red-500 transition group">
@@ -112,13 +134,12 @@ export default function PomodoroPage() {
                         </span>
                     </button>
 
-                    {/* 中間番茄圖片 (Hover 播動畫，點擊切換下一個) */}
                     <div
                         className="relative cursor-pointer transition-transform duration-150 hover:scale-105"
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                         onClick={handleNextMode}
-                        title="點擊切換模式">
+                        title="點擊切換下一個階段">
                         <img
                             src={tomatoImages[currentImageKey]}
                             alt="Tomato Sprite"
@@ -126,8 +147,6 @@ export default function PomodoroPage() {
                         />
                     </div>
 
-                    {/* 右側模式按鈕 (帶小箭頭) */}
-                    {/* 右側模式按鈕 (帶小箭頭) */}
                     <button
                         onClick={() => changeMode(rightModeKey)}
                         className="flex items-center gap-1 font-pixel text-xs text-gray-400 hover:text-red-500 transition group">
@@ -140,24 +159,24 @@ export default function PomodoroPage() {
                     </button>
                 </div>
 
-                {/* 當前模式名稱 */}
                 <h2 className="font-pixel text-xl text-red-500 mb-6 uppercase tracking-wide">
                     {MODES[mode].name}
                 </h2>
 
-                {/* 像素風倒數計時顯示 */}
                 <div className="w-full py-6 bg-rose-50/50 dark:bg-gray-950 rounded-xl border border-rose-100 dark:border-gray-800 mb-8">
                     <span className="font-pixel text-5xl sm:text-6xl text-red-600 dark:text-red-400 tracking-wider">
                         {formatTime(timeLeft)}
                     </span>
                 </div>
-
-                {/* 遊戲風格控制按鈕 (STOP / PAUSE-START / NEXT) */}
+                {/* 顯示目前累積完成的專注次數 */}
+                <p className="font-pixel text-xs text-gray-400 mb-6">
+                    Completed Focus: {focusCount} / 4
+                </p>
                 <div className="flex justify-center gap-3 w-full">
                     <button
                         onClick={() => changeMode("focus")}
                         className="flex-1 py-3 font-pixel text-xs bg-rose-100 dark:bg-gray-800 text-rose-800 dark:text-rose-200 rounded-lg hover:bg-rose-200 dark:hover:bg-gray-700 transition">
-                        STOP
+                        RESET
                     </button>
                     <button
                         onClick={() => setIsRunning(!isRunning)}
