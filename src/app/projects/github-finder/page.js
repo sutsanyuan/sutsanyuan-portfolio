@@ -45,16 +45,16 @@ export default function GithubFinderPage() {
             </div>
 
             {/* 主面板容器 */}
-            <div className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 shadow-sm text-center flex flex-col items-center">
+            <div className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl px-4 py-8 sm:p-8 shadow-sm text-center flex flex-col items-center">
                 <h1 className="font-pixel text-3xl text-gray-900 dark:text-white mb-2 tracking-wider">
-                    DEV FINDER
+                    <span className="text-blue-600">DEV</span> FINDER
                 </h1>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
                     Search GitHub profiles and explore developer stats instantly.
                 </p>
 
                 {/* 搜尋表單 */}
-                <form onSubmit={fetchGithubUser} className="w-full flex gap-2 mb-8">
+                <form onSubmit={fetchGithubUser} className="w-full max-w-[380px] flex gap-2 mb-8">
                     <input
                         type="text"
                         placeholder="Enter GitHub username (e.g. sutsanyuan)..."
@@ -65,7 +65,7 @@ export default function GithubFinderPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-xl transition shadow-sm disabled:opacity-50 ">
+                        className="px-6  py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-xl transition shadow-sm disabled:opacity-50 ">
                         {loading ? "Searching..." : "Search"}
                     </button>
                 </form>
