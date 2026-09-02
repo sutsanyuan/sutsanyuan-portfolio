@@ -1,38 +1,39 @@
 import React from "react";
+import Link from "next/link";
 
 const Projects = () => {
     const projects = [
         {
+            title: "Github Finder",
+            description:
+                "A developer profile search tool leveraging GitHub REST API. Features async data handling, error boundaries, and defensive UI rendering for instant stats exploration.",
+            tags: ["Next.js", "Tailwind CSS", "React", "REST API"],
+            github: "https://github.com/sutsanyuan/sutsanyuan-portfolio/tree/main/src/app/projects/github-finder",
+            demo: "/projects/github-finder",
+        },
+        {
+            title: "Pomodoro Timer",
+            description:
+                "A retro pixel-art focus timer featuring custom multi-mode intervals (Focus/Break/Rest), dynamic sprite hover animations, and automated work-rest cycle logic.",
+            tags: ["Next.js", "Tailwind CSS", "React", "Pixel Art"],
+            github: "https://github.com/sutsanyuan/sutsanyuan-portfolio/tree/main/src/app/projects/pomodoro",
+            demo: "/projects/pomodoro",
+        },
+        {
             title: "Personal Portfolio",
             description:
-                "A modern, minimalist personal portfolio website built with Next.js App Router, Tailwind CSS, and deployed on Vercel.",
+                "A modern, minimalist personal portfolio website built with Next.js App Router, custom pixel typography, and dark mode support deployed on Vercel.",
             tags: ["Next.js", "Tailwind CSS", "React"],
             github: "https://github.com/sutsanyuan/sutsanyuan-portfolio",
-            demo: "https://sutsanyuan-portfolio.vercel.app/",
+            demo: "/",
         },
         {
             title: "Little Lemon Restaurant Reservation System",
-            description: `Developed an end-to-end restaurant reservation solution to address the lack of online booking capabilities for Little Lemon Restaurant. This project bridges the gap between user experience research and technical execution, delivering a functional, responsive, and robust application.`,
-            tags: [
-                "React",
-                "create-react-app",
-                "JavaScript",
-                "HTML5",
-                "SCSS",
-                "Jest",
-                "Figma",
-                "Jest",
-                "UX Design",
-            ],
+            description:
+                "An end-to-end restaurant reservation solution bridging UX research and technical execution, delivering a functional, responsive, and robust online booking application.",
+            tags: ["React", "JavaScript", "Jest", "Figma", "UX Design"],
             github: "https://github.com/sutsanyuan/little-lemon",
-            demo: "https://little-lemon-4k4.pages.dev/",
-        },
-        {
-            title: "Pomodoro",
-            description: `Developed an pomodoro tool with Next.js App Router, Tailwind CSS, and deployed on Vercel.`,
-            tags: ["Next.js", "Tailwind CSS", "React"],
-            github: "https://github.com/sutsanyuan/sutsanyuan-portfolio/tree/main/src/app/projects/pomodoro",
-            demo: "https://sutsanyuan-portfolio.vercel.app/projects/pomodoro",
+            demo: "https://little-lemon-4k4.pages.dev/", // 這是外部獨立專案，維持原樣沒問題！
         },
     ];
     return (
@@ -71,13 +72,23 @@ const Projects = () => {
                                 className="text-sm font-medium text-gray-700 hover:text-gray-900 transition">
                                 GitHub →
                             </a>
-                            <a
-                                href={project.demo}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm font-medium text-blue-600 hover:text-blue-700 transition">
-                                Live Demo →
-                            </a>
+
+                            {/* 判斷如果是站內路徑用 Link，外部網址用 a */}
+                            {project.demo.startsWith("/") ? (
+                                <Link
+                                    href={project.demo}
+                                    className="text-sm font-medium text-blue-600 hover:text-blue-700 transition">
+                                    Live Demo →
+                                </Link>
+                            ) : (
+                                <a
+                                    href={project.demo}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm font-medium text-blue-600 hover:text-blue-700 transition">
+                                    Live Demo →
+                                </a>
+                            )}
                         </div>
                     </article>
                 ))}
