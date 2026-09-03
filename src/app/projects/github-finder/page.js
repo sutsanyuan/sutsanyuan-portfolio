@@ -54,7 +54,7 @@ export default function GithubFinderPage() {
                 </p>
 
                 {/* 搜尋表單 */}
-                <form onSubmit={fetchGithubUser} className="w-full flex gap-2 mb-8">
+                <form onSubmit={fetchGithubUser} className="w-full max-w-[380px] flex gap-2 mb-8">
                     <input
                         type="text"
                         placeholder="Enter GitHub username..."
