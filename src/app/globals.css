@@ -28,3 +28,22 @@ body {
   color: var(--foreground);
   font-family:var(--font-sans);
 }
+
+/* weather cloud animation*/
+@keyframes sway {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(8px); /* 左右擺動的幅度，像素風可以調小一點更有感覺 */
+  }
+}
+
+.animate-sway {
+  animation: sway 4s ease-in-out infinite;
+}
+
+/* 確保像素圖片不會變模糊 */
+.pixel-img {
+  image-rendering: pixelated;
+}
