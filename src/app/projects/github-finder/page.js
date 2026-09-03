@@ -54,18 +54,18 @@ export default function GithubFinderPage() {
                 </p>
 
                 {/* 搜尋表單 */}
-                <form onSubmit={fetchGithubUser} className="w-full max-w-[380px] flex gap-2 mb-8">
+                <form onSubmit={fetchGithubUser} className="w-full flex gap-2 mb-8">
                     <input
                         type="text"
-                        placeholder="Enter GitHub username (e.g. sutsanyuan)..."
+                        placeholder="Enter GitHub username..."
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="min-w-0 flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-6  py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-xl transition shadow-sm disabled:opacity-50 ">
+                        className="px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-xl transition shadow-sm disabled:opacity-50 whitespace-nowrap">
                         {loading ? "Searching..." : "Search"}
                     </button>
                 </form>
