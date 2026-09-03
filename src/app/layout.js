@@ -22,8 +22,21 @@ const pressStart2P = Press_Start_2P({
 });
 
 export const metadata = {
-    title: "Sutsanyuan | Portfolio",
+    title: "sutsanyuan | Portfolio",
     description: "Frontend Developer Portfolio",
+    openGraph: {
+        title: "sutsanyuan | Portfolio",
+        description: "Frontend Developer Portfolio",
+        url: "https://sutsanyuan-portfolio.vercel.app",
+        images: [
+            {
+                url: "/images/main-og.jpg", // 這是這個專案專屬的預覽縮圖
+                width: 1200,
+                height: 630,
+                alt: "Portfolio Preview",
+            },
+        ],
+    },
 };
 
 export default function RootLayout({ children }) {
