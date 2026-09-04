@@ -9,77 +9,130 @@ export default function WeatherPage() {
     // 天氣主題設定檔：包含背景色、文字色、內外層裝飾、紋理與預設數值
     const weatherThemes = {
         sunny: {
-            bg: "bg-[#28A9FF]",
+            bg: "bg-[#009DFF]",
             text: "text-black",
-            cardBg: "bg-[#4CB8FF]/60",
-            title: "SUNNY",
+            tempText: "text-[#FFDB00]",
+            cardBg: "bg-[#ffF]/30",
+            title: "WEATHER",
             temp: "39°",
             desc: "Sunny",
             pattern: "", // 乾淨背景
             innerDecorations: (
-                <div className="absolute top-4 left-4 text-xs opacity-40 pointer-events-none">
-                    ✨
-                </div>
+                <>
+                    <img
+                        src="/images/weather/deco_sunny_inner_l.png"
+                        alt="sun"
+                        className="absolute -top-[-20%] -left-16  w-[169] h-[169] pointer-events-none animate-pulse"></img>
+
+                    <img
+                        src="/images/weather/deco_sunny_inner_r.png"
+                        alt="cloud"
+                        className="absolute -top-[-70%] -right-[-20%] w-[112.35] h-[60.06px] image-rendering-pixelated pointer-events-none animate-sway"
+                    />
+                </>
             ),
             outerDecorations: (
                 <>
-                    {/* 左上角外凸的太陽 */}
-                    <div className="absolute -top-8 -left-8 text-6xl pointer-events-none animate-pulse">
-                        ☀️
-                    </div>
-                    {/* 右側外凸的雲朵 */}
-                    <div className="absolute top-16 -right-8 text-5xl pointer-events-none">☁️</div>
+                    <img
+                        src="/images/weather/deco_cloudy_outer_l.png"
+                        alt="cloud"
+                        className="absolute -top-[-60%] -left-16 w-[112.35] h-[40.02px] image-rendering-pixelated pointer-events-none animate-sway z-50"
+                    />
+                    <img
+                        src="/images/weather/deco_cloudy_outer_r.png"
+                        alt="cloud"
+                        className="absolute -top-[-40%] -right-16 w-[138.79] h-[66.72px] image-rendering-pixelated pointer-events-none animate-sway z-50"
+                        style={{ animationDuration: "6s", animationDelay: "1s" }}
+                    />
                 </>
             ),
         },
         cloudy: {
             bg: "bg-[#BFF9FF]",
             text: "text-slate-900",
-            cardBg: "bg-[#BFE9F4]/60",
+            tempText: "",
+            cardBg: "bg-[#BFE9F4]/30",
             title: "WEATHER",
             temp: "30°",
             desc: "Partly Cloud",
             pattern: "",
             innerDecorations: (
-                <img
-                    src="/images/weather/deco_cloudy_outer_l.png"
-                    alt="cloud"
-                    className="absolute -top-[-40%] -left-16 w-[112.35] h-[60.02px] image-rendering-pixelated pointer-events-none animate-sway"
-                />
+                <>
+                    <img
+                        src="/images/weather/deco_cloudy_inner_l.png"
+                        alt="cloud"
+                        className="absolute -top-[-60%] -left-16 w-[191.35] h-[113.43px] image-rendering-pixelated pointer-events-none animate-sway"
+                        style={{ animationDuration: "8s", animationDelay: "1.2s" }}
+                    />
+                    <img
+                        src="/images/weather/deco_cloudy_inner_r.png"
+                        alt="cloud"
+                        className="absolute -top-[-60%] -right-16 w-[376.73] h-[193.49px] image-rendering-pixelated pointer-events-none animate-sway"
+                    />
+                </>
             ),
             outerDecorations: (
                 <>
-                    <div className="absolute top-8 -right-8 text-5xl pointer-events-none z-50">
-                        ☁️
-                    </div>
-                    <div className="absolute -bottom-6 -left-6 text-5xl pointer-events-none">
-                        ☁️
-                    </div>
+                    <img
+                        src="/images/weather/deco_cloudy_outer_l.png"
+                        alt="cloud"
+                        className="absolute -top-[-40%] -left-16 w-[112.35] h-[40.02px] image-rendering-pixelated pointer-events-none animate-sway z-50"
+                    />
+                    <img
+                        src="/images/weather/deco_cloudy_outer_r.png"
+                        alt="cloud"
+                        className="absolute -top-[-40%] -right-16 w-[138.79] h-[66.72px] image-rendering-pixelated pointer-events-none animate-sway z-50"
+                        style={{ animationDuration: "6s", animationDelay: "1s" }}
+                    />
                 </>
             ),
         },
         rainy: {
-            bg: "bg-[#6A92A6]",
-            text: "text-white",
-            cardBg: "bg-[#82A8BC]/60",
+            bg: "bg-[#68A9D2]",
+            text: "text-slate-900",
+            tempText: "text-white",
+            cardBg: "bg-[#fff]/30",
             title: "WEATHER",
             temp: "20°",
             desc: "Rainy / Shower",
             // 滿版重複雨滴背景紋理
-            pattern:
-                "bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]",
+            pattern: "",
             innerDecorations: (
-                <div className="absolute top-20 left-6 text-[10px] tracking-widest text-white/50 font-pixel pointer-events-none">
-                    /// ///
-                </div>
+                <>
+                    <div className="w-[100%] h-[100%] absolute -top-[0%] -left-0 bg-[url(/images/weather/pattern_rainy.png)] bg-center bg-repeat bg-size-[84px_auto] animate-pulse"></div>
+                    <img
+                        src="/images/weather/deco_rainy_inner_r.png"
+                        alt="cloud"
+                        className="absolute -top-[-20%] -left-16 w-[200] h-auto image-rendering-pixelated pointer-events-none animate-sway"
+                        style={{ animationDuration: "8s", animationDelay: "1.2s" }}
+                    />
+                    <img
+                        src="/images/weather/deco_rainy_inner_r.png"
+                        alt="cloud"
+                        className="absolute -top-[-60%] -right-16 w-[200] h-auto image-rendering-pixelated pointer-events-none animate-sway"
+                    />
+                </>
             ),
             outerDecorations: (
-                <div className="absolute top-6 -right-8 text-5xl pointer-events-none">🌧️</div>
+                <>
+                    <img
+                        src="/images/weather/deco_rainy_outer_l.png"
+                        alt="cloud"
+                        className="absolute -top-[-50%] -left-16 w-[144] h-[47] image-rendering-pixelated pointer-events-none animate-sway z-50"
+                    />
+                    <img
+                        src="/images/weather/deco_rainy_outer_r.png"
+                        alt="cloud"
+                        className="absolute -top-[-25%] -right-16 w-[177] h-[57] image-rendering-pixelated pointer-events-none animate-sway z-50"
+                        style={{ animationDuration: "6s", animationDelay: "1s" }}
+                    />
+                </>
             ),
         },
         night: {
-            bg: "bg-[#1144AA]",
+            bg: "bg-[#0059C5]",
             text: "text-white",
+            tempText: "",
             cardBg: "bg-[#1A55CC]/60",
             title: "WEATHER",
             temp: "18°",
@@ -106,7 +159,7 @@ export default function WeatherPage() {
     const currentTheme = weatherThemes[weatherType];
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-140px)] justify-center items-center px-6 max-w-xl mx-auto py-12">
+        <div className="flex flex-col min-h-[calc(100vh-140px)] justify-center items-center px-6 max-w-xl mx-auto py-12 overflow-hidden">
             {/* 返回按鈕 */}
             <div className="w-full text-left mb-6 max-w-[320px]">
                 <Link
@@ -139,7 +192,7 @@ export default function WeatherPage() {
 
                 {/* 卡片本體：加上 overflow-hidden 與 rounded-3xl，鎖住內層紋理與內容 */}
                 <div
-                    className={`relative w-full ${currentTheme.bg} ${currentTheme.text} ${currentTheme.pattern} overflow-hidden border-2 border-black rounded-3xl p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-center flex flex-col items-center transition-all duration-500`}>
+                    className={`relative w-full ${currentTheme.bg} ${currentTheme.text} ${currentTheme.pattern} overflow-hidden rounded-3xl p-6  text-center flex flex-col items-center transition-all duration-500`}>
                     {/* [內層絕對定位裝飾] 會被卡片邊緣完美裁切，不會亂跑 */}
                     {currentTheme.innerDecorations}
 
@@ -149,7 +202,7 @@ export default function WeatherPage() {
                     </h1>
 
                     {/* 城市切換列 */}
-                    <div className="flex justify-center gap-2 mb-6 w-full relative z-10">
+                    <div className="flex flex-wrap justify-center gap-2 mb-6 w-full relative z-10">
                         {["Taipei", "Barcelona", "Madrid"].map((c, i) => (
                             <span
                                 key={c}
@@ -164,10 +217,11 @@ export default function WeatherPage() {
                     </div>
 
                     {/* 城市名稱 */}
-                    <h2 className="font-pixel text-sm mb-1 opacity-90 relative z-10">TAIPEI</h2>
+                    <h2 className="font-pixel text-xl mb-4 opacity-90 relative z-10">TAIPEI</h2>
 
                     {/* 溫度 */}
-                    <div className="font-pixel text-6xl mb-1 relative z-10">
+                    <div
+                        className={`font-pixel text-6xl mb-1 relative z-10 pl-15 ${currentTheme.tempText}`}>
                         {currentTheme.temp}
                     </div>
 
@@ -178,19 +232,19 @@ export default function WeatherPage() {
 
                     {/* 底部數據區塊 */}
                     <div className="grid grid-cols-2 gap-3 w-full relative z-10">
-                        <div
-                            className={`p-3 ${currentTheme.cardBg} border-2 border-black rounded-2xl`}>
+                        <div className={`p-3 ${currentTheme.cardBg} backdrop-blur-sm rounded-2xl`}>
                             <span className="block font-pixel text-[9px] mb-1 opacity-80">
                                 HUMIDITY
                             </span>
-                            <span className="font-pixel text-sm">77%</span>
+                            <span className="font-pixel text-xl">77%</span>
                         </div>
-                        <div
-                            className={`p-3 ${currentTheme.cardBg} border-2 border-black rounded-2xl`}>
+                        <div className={`p-3 ${currentTheme.cardBg}  backdrop-blur-sm rounded-2xl`}>
                             <span className="block font-pixel text-[9px] mb-1 opacity-80">
                                 WIND SPEED
                             </span>
-                            <span className="font-pixel text-xs">14.7 km/h</span>
+                            <span className="font-pixel text-xs text-nowrap">
+                                14.7 <span className="text-xs">km/h</span>
+                            </span>
                         </div>
                     </div>
                 </div>
