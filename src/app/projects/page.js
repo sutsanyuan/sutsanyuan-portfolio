@@ -4,6 +4,14 @@ import Link from "next/link";
 const Projects = () => {
     const projects = [
         {
+            title: "Pixel Weather",
+            description:
+                "A retro pixel-style weather dashboard with dynamic themes and real-time Open-Meteo API data.",
+            tags: ["Next.js", "Tailwind CSS", "React", "REST API"],
+            github: "https://github.com/sutsanyuan/sutsanyuan-portfolio/tree/main/src/app/projects/weather",
+            demo: "/projects/weather",
+        },
+        {
             title: "Github Finder",
             description:
                 "A developer profile search tool leveraging GitHub REST API. Features async data handling, error boundaries, and defensive UI rendering for instant stats exploration.",

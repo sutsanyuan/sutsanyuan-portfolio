@@ -1,10 +1,116 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function WeatherPage() {
+    const [selectedCity, setSelectedCity] = useState("Taipei, TW");
+    const [weatherData, setWeatherData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [weatherType, setWeatherType] = useState("sunny");
+    // 搜尋功能
+    const [searchInput, setSearchInput] = useState("");
+
+    // 城市經緯度對照（用 Key 作為查詢對應）
+    const cities = {
+        Taipei: { name: "Taipei, TW", query: "Taipei", lat: 25.0478, lon: 121.5318 },
+        Barcelona: { name: "Barcelona, ES", query: "Barcelona", lat: 41.3851, lon: 2.1734 },
+        Madrid: { name: "Madrid, ES", query: "Madrid", lat: 40.4168, lon: -3.7038 },
+    };
+
+    // 根據 Open-Meteo 的 weather_code 轉譯成妳的樣式 key
+    const translateWeatherCode = (code, isNight) => {
+        // 0: 晴天
+        if (code === 0) return isNight ? "night" : "sunny";
+        // 1, 2, 3: 多雲 / 陰天
+        if (code >= 1 && code <= 3) return "cloudy";
+        // 51-67, 80-99: 雨天 / 陣雨
+        if ((code >= 51 && code <= 67) || (code >= 80 && code <= 99)) return "rainy";
+        // 預設
+        return isNight ? "night" : "sunny";
+    };
+
+    // 抓取 API 資料（透過快捷按鈕的 key 取得）
+    const fetchWeather = async (cityKey) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const cityObj = cities[cityKey];
+            if (!cityObj) throw new Error("City not found");
+
+            const { lat, lon } = cityObj;
+            const res = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,is_day,weather_code,wind_speed_10m`,
+            );
+
+            if (!res.ok) throw new Error("Error fetching data！");
+            const data = await res.json();
+
+            const current = data.current;
+            setWeatherData(current);
+            setSelectedCity(cityObj.name);
+
+            // 判斷是否為夜晚 (is_day === 0 代表晚上)
+            const isNight = current.is_day === 0;
+            const matchedType = translateWeatherCode(current.weather_code, isNight);
+            setWeatherType(matchedType);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // 畫面載入時自動抓取預設城市 (Taipei)
+    useEffect(() => {
+        fetchWeather("Taipei");
+    }, []);
+
+    // 根據城市名稱搜尋經緯度並取得天氣
+    const handleSearchSubmit = async (e) => {
+        e.preventDefault();
+        if (!searchInput.trim()) return;
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            // 1. 透過 Open-Meteo Geocoding API 查出城市的經緯度
+            const geoRes = await fetch(
+                `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchInput)}&count=1`,
+            );
+            const geoData = await geoRes.json();
+
+            if (!geoData.results || geoData.results.length === 0) {
+                throw new Error("City not found, please check the spelling");
+            }
+
+            const { latitude, longitude, name, country } = geoData.results[0];
+            const cityName = country ? `${name}, ${country}` : name;
+            setSelectedCity(cityName);
+
+            // 2. 用查到的經緯度去抓天氣
+            const weatherRes = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,is_day,weather_code,wind_speed_10m`,
+            );
+
+            if (!weatherRes.ok) throw new Error("Failed fetching data！");
+            const weatherData = await weatherRes.json();
+
+            const current = weatherData.current;
+            setWeatherData(current);
+
+            // 判斷日夜並切換主題
+            const isNight = current.is_day === 0;
+            setWeatherType(translateWeatherCode(current.weather_code, isNight));
+            setSearchInput(""); // 搜尋完清空輸入框
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // 天氣主題設定檔：包含背景色、文字色、內外層裝飾、紋理與預設數值
     const weatherThemes = {
@@ -22,8 +128,8 @@ export default function WeatherPage() {
                     <img
                         src="/images/weather/deco_sunny_inner_l.png"
                         alt="sun"
-                        className="absolute -top-[-20%] -left-16  w-[169] h-[169] pointer-events-none animate-pulse"></img>
-
+                        className="absolute -top-[-10%] -left-16  w-[150] h-[150] pointer-events-none animate-pulse"
+                    />
                     <img
                         src="/images/weather/deco_sunny_inner_r.png"
                         alt="cloud"
@@ -95,7 +201,6 @@ export default function WeatherPage() {
             title: "WEATHER",
             temp: "20°",
             desc: "Rainy / Shower",
-            // 滿版重複雨滴背景紋理
             pattern: "",
             innerDecorations: (
                 <>
@@ -109,7 +214,7 @@ export default function WeatherPage() {
                     <img
                         src="/images/weather/deco_rainy_inner_r.png"
                         alt="cloud"
-                        className="absolute -top-[-60%] -right-16 w-[200] h-auto image-rendering-pixelated pointer-events-none animate-sway"
+                        className="absolute -top-[-70%] -right-16 w-[200] h-auto image-rendering-pixelated pointer-events-none animate-sway"
                     />
                 </>
             ),
@@ -133,33 +238,54 @@ export default function WeatherPage() {
             bg: "bg-[#0059C5]",
             text: "text-white",
             tempText: "",
-            cardBg: "bg-[#1A55CC]/60",
+            cardBg: "bg-white/10",
             title: "WEATHER",
             temp: "18°",
             desc: "Clear Night",
-            // 滿版星點背景紋理
-            pattern:
-                "bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:24px_24px]",
+            pattern: "",
             innerDecorations: (
-                <div className="absolute top-12 left-8 text-xs text-yellow-200 pointer-events-none">
-                    ✦
-                </div>
+                <>
+                    <img
+                        src="/images/weather/deco_clear-night_inner_l-1.png"
+                        alt="star"
+                        className="absolute -top-[-30%] -left-[-10%]  w-[20.74] h-[20.74] pointer-events-none animate-pulse"
+                    />
+                    <img
+                        src="/images/weather/deco_clear-night_inner_l-2.png"
+                        alt="star"
+                        className="absolute -top-[-48%] -left-[-15%]  w-[34.57] h-[34.63] pointer-events-none animate-pulse"
+                        style={{ animationDuration: "1s", animationDelay: "1s" }}
+                    />
+                    <img
+                        src="/images/weather/deco_clear-night_inner_l-3.png"
+                        alt="star"
+                        className="absolute -top-[-66%] -left-[-5%]  w-[20.74] h-[34.63] pointer-events-none animate-pulse"
+                        style={{ animationDuration: "2s", animationDelay: "2s" }}
+                    />
+                    <img
+                        src="/images/weather/deco_clear-night_inner_r-1.png"
+                        alt="cloud"
+                        className="absolute -top-[-65%] -right-[-6%] w-[34.57] h-[34.63] image-rendering-pixelated pointer-events-none animate-pulse"
+                        style={{ animationDuration: "1.2s", animationDelay: "1s" }}
+                    />
+                </>
             ),
             outerDecorations: (
                 <>
-                    <div className="absolute top-6 -right-8 text-5xl pointer-events-none">🌙</div>
-                    <div className="absolute bottom-24 right-12 text-xs text-yellow-200 pointer-events-none">
-                        ✨
-                    </div>
+                    <img
+                        src="/images/weather/deco_clear-night_outer_r.png"
+                        alt="moon"
+                        className="absolute -top-[-9%] -right-10 w-[100] h-auto image-rendering-pixelated pointer-events-none z-9"
+                    />
                 </>
             ),
         },
     };
 
-    const currentTheme = weatherThemes[weatherType];
+    const currentTheme = weatherThemes[weatherType] || weatherThemes.sunny;
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-140px)] justify-center items-center px-6 max-w-xl mx-auto py-12 overflow-hidden">
+        <div className="flex flex-col min-h-[calc(100vh-140px)] justify-center items-center px-6 max-w-xxl mx-auto py-12 overflow-hidden">
             {/* 返回按鈕 */}
             <div className="w-full text-left mb-6 max-w-[320px]">
                 <Link
@@ -169,65 +295,75 @@ export default function WeatherPage() {
                 </Link>
             </div>
 
-            {/* 測試切換不同天氣樣式的按鈕列 */}
-            <div className="flex flex-wrap justify-center gap-2 mb-6">
-                {Object.keys(weatherThemes).map((type) => (
-                    <button
-                        key={type}
-                        onClick={() => setWeatherType(type)}
-                        className={`px-3 py-1 text-xs font-pixel border border-black transition ${
-                            weatherType === type
-                                ? "bg-black text-white"
-                                : "bg-white text-black hover:bg-gray-100"
-                        }`}>
-                        {type}
-                    </button>
-                ))}
-            </div>
+            {/* 城市搜尋表單 */}
+            <form
+                onSubmit={handleSearchSubmit}
+                className="flex gap-2 mb-6 w-full max-w-[320px] relative z-10">
+                <input
+                    type="text"
+                    placeholder="Search city (e.g. Tokyo)..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="flex-1 px-3 py-2 text-xs bg-white/80 text-black border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                    type="submit"
+                    className="px-4 py-2 text-xs font-pixel bg-black text-white rounded-lg hover:bg-gray-800 transition shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    GO
+                </button>
+            </form>
 
-            {/* 最外層容器：不加 overflow-hidden，讓外層裝飾可以順利突出去 */}
+            {/* 錯誤與載入提示 */}
+            {error && (
+                <div className="mb-4 text-xs font-pixel text-red-500 bg-red-100 p-2 border border-red-400 rounded max-w-[320px] w-full text-center">
+                    {error}
+                </div>
+            )}
+
+            {/* 最外層容器 */}
             <div className="relative w-full max-w-[320px] mx-auto">
-                {/* [外層裝飾] 會乖乖突出在卡片外 */}
                 {currentTheme.outerDecorations}
 
-                {/* 卡片本體：加上 overflow-hidden 與 rounded-3xl，鎖住內層紋理與內容 */}
                 <div
-                    className={`relative w-full ${currentTheme.bg} ${currentTheme.text} ${currentTheme.pattern} overflow-hidden rounded-3xl p-6  text-center flex flex-col items-center transition-all duration-500`}>
-                    {/* [內層絕對定位裝飾] 會被卡片邊緣完美裁切，不會亂跑 */}
+                    className={`relative w-full ${currentTheme.bg} ${currentTheme.text} ${currentTheme.pattern} overflow-hidden rounded-3xl p-6 text-center flex flex-col items-center transition-all duration-500`}>
                     {currentTheme.innerDecorations}
 
-                    {/* 標題 */}
                     <h1 className="font-pixel text-2xl mb-6 tracking-wider relative z-10">
                         {currentTheme.title}
                     </h1>
 
                     {/* 城市切換列 */}
                     <div className="flex flex-wrap justify-center gap-2 mb-6 w-full relative z-10">
-                        {["Taipei", "Barcelona", "Madrid"].map((c, i) => (
-                            <span
-                                key={c}
-                                className={`px-3 py-1 font-pixel text-[11px] border border-black rounded-lg ${
-                                    i === 0
-                                        ? "bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                                        : "bg-white/40 text-current"
-                                }`}>
-                                {c}
-                            </span>
-                        ))}
+                        {Object.keys(cities).map((key) => {
+                            const cityObj = cities[key];
+                            return (
+                                <button
+                                    key={key}
+                                    onClick={() => fetchWeather(key)}
+                                    className={`px-3 py-1 font-pixel text-[11px] border rounded-md transition ${
+                                        selectedCity === cityObj.name
+                                            ? "bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                            : "bg-white/40 text-current hover:bg-white/60"
+                                    }`}>
+                                    {key}
+                                </button>
+                            );
+                        })}
                     </div>
 
-                    {/* 城市名稱 */}
-                    <h2 className="font-pixel text-xl mb-4 opacity-90 relative z-10">TAIPEI</h2>
+                    <h2 className="font-pixel text-xl mb-4 opacity-90 relative z-10">
+                        {selectedCity}
+                    </h2>
 
                     {/* 溫度 */}
                     <div
-                        className={`font-pixel text-6xl mb-1 relative z-10 pl-15 ${currentTheme.tempText}`}>
-                        {currentTheme.temp}
+                        className={`font-pixel text-6xl mb-1 relative z-10 pl-16 ${currentTheme.tempText}`}>
+                        {loading ? "--" : `${Math.round(weatherData?.temperature_2m ?? 0)}°`}
                     </div>
 
-                    {/* 天氣描述 */}
-                    <p className="font-pixel text-xs mb-8 opacity-90 relative z-10">
-                        {currentTheme.desc}
+                    <p
+                        className={`font-pixel text-xs mb-8 opacity-90 relative z-10 ${currentTheme.tempText}`}>
+                        {loading ? "FETCHING..." : currentTheme.desc}
                     </p>
 
                     {/* 底部數據區塊 */}
@@ -236,14 +372,17 @@ export default function WeatherPage() {
                             <span className="block font-pixel text-[9px] mb-1 opacity-80">
                                 HUMIDITY
                             </span>
-                            <span className="font-pixel text-xl">77%</span>
+                            <span className="font-pixel text-xl">
+                                {loading ? "--" : `${weatherData?.relative_humidity_2m}%`}
+                            </span>
                         </div>
-                        <div className={`p-3 ${currentTheme.cardBg}  backdrop-blur-sm rounded-2xl`}>
+                        <div className={`p-3 ${currentTheme.cardBg} backdrop-blur-sm rounded-2xl`}>
                             <span className="block font-pixel text-[9px] mb-1 opacity-80">
                                 WIND SPEED
                             </span>
                             <span className="font-pixel text-xs text-nowrap">
-                                14.7 <span className="text-xs">km/h</span>
+                                {loading ? "--" : weatherData?.wind_speed_10m}{" "}
+                                <span className="text-xs">km/h</span>
                             </span>
                         </div>
                     </div>
