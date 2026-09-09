@@ -4,6 +4,14 @@ import Link from "next/link";
 const Projects = () => {
     const projects = [
         {
+            title: "3D Pokemon Card",
+            description:
+                "An interactive 3D Pokémon-style card featuring smooth GSAP flip animations, dynamic texture swapping, and crystal-clear high-res texture rendering via Three.js.",
+            tags: ["Next.js", "Three.js", "React", "GSAP", "Tailwind CSS"],
+            github: "https://github.com/sutsanyuan/sutsanyuan-portfolio/tree/main/src/app/projects/3d-card",
+            demo: "/projects/3d-card",
+        },
+        {
             title: "Pixel Weather",
             description:
                 "A retro pixel-style weather dashboard with dynamic themes and real-time Open-Meteo API data.",
