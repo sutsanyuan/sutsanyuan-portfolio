@@ -4,6 +4,14 @@ import Link from "next/link";
 const Projects = () => {
     const projects = [
         {
+            title: "AdScope: Competitor Ads Intelligence",
+            description:
+                "A competitor ad research tool: a Chrome extension (Manifest V3) that clips ads from Meta Ad Library with auto-filled details and compressed screenshots, plus a React dashboard for browsing and organizing them, sharing one Supabase backend.",
+            tags: ["React", "Chrome Extension", "Supabase", "Vite", "Tailwind CSS"],
+            github: "https://github.com/sutsanyuan/competitor-ads-intelligence",
+            demo: "https://competitor-ads-intelligence-theta.vercel.app",
+        },
+        {
             title: "3D Pokemon Card",
             description:
                 "An interactive 3D Pokémon-style card featuring smooth GSAP flip animations, dynamic texture swapping, and crystal-clear high-res texture rendering via Three.js.",
