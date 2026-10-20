@@ -20,14 +20,15 @@ const AboutTsan = () => {
 
             <article className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                    Hello! I&apos;m Tsan, an aspiring frontend developer dedicated to bridging the
-                    gap between elegant design and efficient code. I love turning complex problems
-                    into simple, beautiful, and intuitive interfaces.
+                    Hi, I’m Tsan — a front-end developer with a design background. For the past 3
+                    years at TutorABC, I’ve built and shipped responsive marketing landing pages,
+                    turning Figma designs into fast, mobile-first pages under tight campaign
+                    deadlines. Before that, I spent years in visual and multimedia design, and I
+                    hold an MFA in New Media Art.
                 </p>
                 <p>
-                    My development philosophy is rooted in simplicity and performance—focusing on
-                    writing scalable architecture and clean UI/UX rather than unnecessary
-                    complexity.
+                    Today I focus on React: I build products end to end, from UX research and Figma
+                    prototypes to tested React code with Jest and React Testing Library.
                 </p>
             </article>
 
